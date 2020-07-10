@@ -1,0 +1,93 @@
+version: "2.2"
+
+services:
+    # 服务名称
+    nginx:
+        image: nginx:1.13.9-alpine # 服务使用的镜像
+        container_name: nginx # 容器名称
+        ports: # 服务运行端口
+            - "80:80"
+            - "443:443"
+        environment: # 容器的环境变量
+            TZ : "Asia/Shanghai" # 设置时区
+        links: # 连接其他容器的服务
+            - "php72"
+        volumes: # 将宿主机的文件或目录挂载到容器中
+            - ../config/nginx/nginx.conf:/etc/nginx/nginx.conf:rw # 将配置文件挂到主机
+            - ../config/nginx/conf.d/:/etc/nginx/conf.d/:rw # 将配置文件夹挂到主机
+            - ../config/nginx/ssl/:/etc/nginx/ssl/:rw # 将证书文件夹挂在到主机
+            - ../logs/nginx/:/var/log/nginx/:rw # 将日志文件夹挂载到主机
+            - ../www/:/usr/share/nginx/html/:rw # nginx 静态资源
+        restart: always # 挂断自动重新启动
+        networks:
+            fasti_net:
+                ipv4_address: "192.63.0.11"
+
+    php72:
+        # image: php:7.2-fpm-alpine # 服务使用的镜像
+        build: ./php72
+        container_name: php7.2-fpm # 容器名称
+        ports: # 服务运行端口
+            - "9000:9000"
+        links: # 连接其他容器的服务
+            - "mysql"
+            - "redis" 
+        environment: # 容器的环境变量
+            TZ : "Asia/Shanghai" # 设置时区
+        volumes: # 将宿主机的文件或目录挂载到容器中
+            - ../config/php/php72.ini:/usr/local/etc/php/php.ini:rw # 将配置文件挂到主机
+            - ../config/php/conf.d:/usr/local/etc/php/conf.d/:rw # 将配置文件夹挂到主机
+            - ../www/:/var/www/html/:rw # 项目目录映射
+        restart: always # 挂断自动重新启动
+        privileged: true # 获取特权
+        networks:
+            fasti_net:
+                ipv4_address: "192.63.0.12"
+
+    redis:
+        image: redis:5-alpine # 服务使用的镜像
+        container_name: redis # 容器名称
+        mem_limit: 100m
+        ports: # 服务运行端口
+            - "6379:6379"
+        environment: # 容器的环境变量
+            TZ : "Asia/Shanghai" # 设置时区
+        volumes: # 将宿主机的文件或目录挂载到容器中
+            - ../config/redis/redis.conf:/etc/redis/redis.conf:rw # 将配置文件挂到主机
+            - ../data/redis/:/data/:rw # 将数据文件夹挂载到主机
+        command: redis-server /etc/redis/redis.conf # 容器执行命令
+        restart: always # 挂断自动重新启动
+        privileged: true # 获取特权
+        networks:
+            fasti_net:
+                ipv4_address: "192.63.0.21"
+     
+    mysql:
+        image: mysql:5.7 # 服务使用的镜像
+        container_name: mysql # 容器名称
+        ports: # 服务运行端口
+            - "3306:3306"
+        environment:  # 容器的环境变量
+            - MYSQL_ROOT_PASSWORD = "root" # 初始化root用户的密码
+            - TZ = "Asia/Shanghai" # 设置时区
+        volumes: # 将宿主机的文件或目录挂载到容器中
+            - ../config/mysql/my.cnf:/etc/mysql/my.cnf:ro # 将配置文件挂到主机
+            - ../config/mysql/conf.d:/etc/mysql/conf.d:ro # 将配置文件夹挂到主机
+            - ../data/mysql/:/var/lib/mysql/:rw # 将数据文件夹挂载到主机
+            - ../logs/mysql/:/var/log/mysql/:rw # 将日志文件夹挂载到主机
+        restart: always # 挂断自动重新启动
+        command: # 容器执行命令
+            - --character-set-server=utf8mb4 
+            - --collation-server=utf8mb4_unicode_ci
+        privileged: true # 获取特权
+        networks:
+            fasti_net:
+                ipv4_address: "192.63.0.31"
+                
+networks:
+    fasti_net:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: "192.63.0.0/16"
