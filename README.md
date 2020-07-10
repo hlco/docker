@@ -1,7 +1,7 @@
 ### 工程目录
 ```
 docker
-├── build
+├── build # 镜像
 │   ├── php72
 │   │   └── Dockerfile
 │   ├── nginx
@@ -11,7 +11,7 @@ docker
 │   ├── redis
 │   │   └── Dockerfile
 │   └── docker-compose.yml
-├── config
+├── config # 服务器配置
 │   ├── redis
 │   │   └── redis.conf
 │   ├── mysql
@@ -24,12 +24,12 @@ docker
 │   ├── php
 │   │   ├── conf.d
 │   │   └── php72.ini
-├── data
+├── data # 服务数据
 │   ├── mysql
 │   └── redis
-├── logs
+├── logs # 服务日志
 │   ├── mysql
 │   ├── nginx
 │   └── php
-└── www
+└── www # 静态资源
 ```
