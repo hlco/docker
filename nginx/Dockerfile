@@ -1,9 +1,13 @@
+# 基础镜像
 FROM alpine:3.5
 
-MAINTAINER NGINX Docker Maintainers "docker-maint@nginx.com"
+# 作者信息
+MAINTAINER NGINX Docker Maintainers "632968802@qq.com"
 
+# 设置变量
 ENV NGINX_VERSION 1.12.1
 
+# 编译安装nginx
 RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 	&& CONFIG="\
 		--prefix=/etc/nginx \
@@ -133,11 +137,14 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 	&& ln -sf /dev/stdout /var/log/nginx/access.log \
 	&& ln -sf /dev/stderr /var/log/nginx/error.log
 
+# 将目录下的文件copy到镜像中
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY nginx.vh.default.conf /etc/nginx/conf.d/default.conf
 
+# 开放80端口
 EXPOSE 80
 
 STOPSIGNAL SIGTERM
 
+# 启动nginx命令
 CMD ["nginx", "-g", "daemon off;"]
