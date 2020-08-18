@@ -2,7 +2,7 @@
 FROM alpine:3.5
 
 # 作者信息
-MAINTAINER NGINX Docker Maintainers "632968802@qq.com"
+MAINTAINER NGINX HL "632968802@qq.com"
 
 # 设置变量
 ENV NGINX_VERSION 1.12.1
