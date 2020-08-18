@@ -1,4 +1,4 @@
-version: "2.2"
+version: "3"
 
 services:
     # 服务名称
@@ -23,19 +23,19 @@ services:
             fasti_net:
                 ipv4_address: "192.63.0.11"
 
-    php72:
+    php:
         # image: php:7.2-fpm-alpine # 服务使用的镜像
         build: ./php
-        container_name: php7.2-fpm # 容器名称
+        container_name: php7.3-fpm # 容器名称
         ports: # 服务运行端口
             - "9000:9000"
         links: # 连接其他容器的服务
             - "mysql"
-            - "redis" 
+            - "redis"
         environment: # 容器的环境变量
             TZ : "Asia/Shanghai" # 设置时区
         volumes: # 将宿主机的文件或目录挂载到容器中
-            - ./php/php.ini:/usr/local/etc/php/php7.2.ini:rw # 将配置文件挂到主机
+            - ./php/php.ini:/usr/local/etc/php/php.ini:rw # 将配置文件挂到主机
             - ./php/conf.d:/usr/local/etc/php/conf.d/:rw # 将配置文件夹挂到主机
             - ../www/:/var/www/html/:rw # 项目目录映射
         restart: always # 挂断自动重新启动
@@ -61,7 +61,7 @@ services:
         networks:
             fasti_net:
                 ipv4_address: "192.63.0.21"
-     
+
     mysql:
         image: mysql:5.7 # 服务使用的镜像
         container_name: mysql # 容器名称
@@ -77,13 +77,13 @@ services:
             - ./mysql/logs/:/var/log/mysql/:rw # 将日志文件夹挂载到主机
         restart: always # 挂断自动重新启动
         command: # 容器执行命令
-            - --character-set-server=utf8mb4 
+            - --character-set-server=utf8mb4
             - --collation-server=utf8mb4_unicode_ci
         privileged: true # 获取特权
         networks:
             fasti_net:
                 ipv4_address: "192.63.0.31"
-                
+
 networks:
     fasti_net:
         driver: bridge
