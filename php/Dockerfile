@@ -4,12 +4,16 @@ LABEL author="HL <632968802@qq.com>"
 
 # 安装基础 package
 RUN set -x \
+#    && adduser -D -u 1000 -g 1000 -s /bin/sh www; \
+#    && mkdir -p /data/site /data/log /data/conf /data/run /data/sessions; \
+#    && chown -R www:www /data; \
     && sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
     && apk update \
     && apk add --no-cache tzdata vim openssl openssh openssl-dev bash curl \
     # 变更时区
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && apk del tzdata
+
 # 安装 PHP
 RUN set -x \
     && apk update \
@@ -20,6 +24,7 @@ RUN set -x \
         php7-memcached php7-tokenizer php7-fileinfo php7-ctype php7-bcmath php7-mcrypt \
         php7-bz2 php7-exif php7-gettext php7-ftp php7-pcntl php7-posix php7-shmop php7-sockets \
         php7-exif php7-sysvmsg php7-sysvsem php7-sysvshm php7-wddx php7-xsl
+
 # 安装 & 配置 composer
 RUN set -x \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin \
@@ -47,5 +52,5 @@ RUN set -x \
     && apk del gcc make linux-headers libc-dev \
     && rm -rf ${MEMCACHE_DIR}:
 
-EXPOSE 80 443
+EXPOSE 9000
 CMD [ "/bin/sh" ]
