@@ -1,5 +1,4 @@
-ARG VERSION=latest
-FROM alpine:${VERSION}
+FROM alpine:latest
 LABEL author="HL <632968802@qq.com>"
 
 # 安装基础 package
