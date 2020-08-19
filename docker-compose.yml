@@ -71,7 +71,6 @@ services:
             - MYSQL_ROOT_PASSWORD = "root" # 初始化root用户的密码
             - TZ = "Asia/Shanghai" # 设置时区
         volumes: # 将宿主机的文件或目录挂载到容器中
-            - ./mysql/conf.d:/etc/mysql/conf.d:ro # 将配置文件夹挂到主机
             - ./mysql/data/:/var/lib/mysql/:rw # 将数据文件夹挂载到主机
             - ./mysql/logs/:/var/log/mysql/:rw # 将日志文件夹挂载到主机
         restart: always # 挂断自动重新启动
