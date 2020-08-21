@@ -34,6 +34,7 @@ services:
         environment: # 容器的环境变量
             TZ : "Asia/Shanghai" # 设置时区
         volumes: # 将宿主机的文件或目录挂载到容器中
+            - ./php/php.ini:/usr/local/etc/php/php.ini:rw # 将配置文件挂到主机
             - ./php/conf.d:/usr/local/etc/php/conf.d/:rw # 将配置文件夹挂到主机
             - ../wwwroot/:/var/www/html/:rw # 项目目录映射
         restart: always # 挂断自动重新启动
