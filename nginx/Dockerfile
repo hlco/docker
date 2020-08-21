@@ -139,7 +139,7 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 
 # 将目录下的文件copy到镜像中
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY nginx.vh.default.conf /etc/nginx/conf.d/default.conf
+COPY conf.d/default.conf /etc/nginx/conf.d/default.conf
 
 # 开放80端口
 EXPOSE 80
