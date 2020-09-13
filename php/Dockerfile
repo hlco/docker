@@ -72,78 +72,77 @@ RUN set -eux; \
 	\
 	apk del --no-network .fetch-deps
 
-RUN set -eux; \
-	apk add --no-cache --virtual .build-deps \
-		$PHPIZE_DEPS \
-		argon2-dev \
-		coreutils \
-		curl-dev \
-		libedit-dev \
-		libsodium-dev \
-		libxml2-dev \
-		linux-headers \
-		oniguruma-dev \
-		openssl-dev \
-		sqlite-dev \
-	; \
-	\
-	export CFLAGS="$PHP_CFLAGS" \
-		CPPFLAGS="$PHP_CPPFLAGS" \
-		LDFLAGS="$PHP_LDFLAGS" \
-	; \
-	docker-php-source extract; \
-	cd /usr/src/php; \
-	gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"; \
-	./configure \
-		--build="$gnuArch" \
-		--with-config-file-path="$PHP_INI_DIR" \
-		--with-config-file-scan-dir="$PHP_INI_DIR/conf.d" \
-		\
-		--enable-option-checking=fatal \
-		\
-		--with-mhash \
-		\
-		--enable-ftp \
-		--enable-mbstring \
-		--enable-mysqlnd \
-		--with-password-argon2 \
-		--with-sodium=shared \
-		--with-pdo-sqlite=/usr \
-		--with-sqlite3=/usr \
-		\
-		--with-curl \
-		--with-libedit \
-		--with-openssl \
-		--with-zlib \
-		\
-		--with-pear \
-		\
-		$(test "$gnuArch" = 's390x-linux-musl' && echo '--without-pcre-jit') \
-		\
-		${PHP_EXTRA_CONFIGURE_ARGS:-} \
-	; \
-	make -j "$(nproc)"; \
-	find -type f -name '*.a' -delete; \
-	make install; \
-	find /usr/local/bin /usr/local/sbin -type f -perm +0111 -exec strip --strip-all '{}' + || true; \
-	make clean; \
-	\
-	cp -v php.ini-* "$PHP_INI_DIR/"; \
-	\
-	runDeps="$( \
-		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
-			| tr ',' '\n' \
-			| sort -u \
-			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
-	)"; \
-	apk add --no-cache $runDeps; \
-	\
-	apk del --no-network .build-deps; \
-	\
-	pecl update-channels; \
-	rm -rf /tmp/pear ~/.pearrc; \
-	\
-	php --version
+#RUN set -eux; \
+#	apk add --no-cache --virtual .build-deps \
+#		$PHPIZE_DEPS \
+#		argon2-dev \
+#		coreutils \
+#		curl-dev \
+#		libedit-dev \
+#		libsodium-dev \
+#		libxml2-dev \
+#		linux-headers \
+#		oniguruma-dev \
+#		openssl-dev \
+#		sqlite-dev \
+#	; \
+#	\
+#	export CFLAGS="$PHP_CFLAGS" \
+#		CPPFLAGS="$PHP_CPPFLAGS" \
+#		LDFLAGS="$PHP_LDFLAGS" \
+#	; \
+#	cd /usr/src/php; \
+#	gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"; \
+#	./configure \
+#		--build="$gnuArch" \
+#		--with-config-file-path="$PHP_INI_DIR" \
+#		--with-config-file-scan-dir="$PHP_INI_DIR/conf.d" \
+#		\
+#		--enable-option-checking=fatal \
+#		\
+#		--with-mhash \
+#		\
+#		--enable-ftp \
+#		--enable-mbstring \
+#		--enable-mysqlnd \
+#		--with-password-argon2 \
+#		--with-sodium=shared \
+#		--with-pdo-sqlite=/usr \
+#		--with-sqlite3=/usr \
+#		\
+#		--with-curl \
+#		--with-libedit \
+#		--with-openssl \
+#		--with-zlib \
+#		\
+#		--with-pear \
+#		\
+#		$(test "$gnuArch" = 's390x-linux-musl' && echo '--without-pcre-jit') \
+#		\
+#		${PHP_EXTRA_CONFIGURE_ARGS:-} \
+#	; \
+#	make -j "$(nproc)"; \
+#	find -type f -name '*.a' -delete; \
+#	make install; \
+#	find /usr/local/bin /usr/local/sbin -type f -perm +0111 -exec strip --strip-all '{}' + || true; \
+#	make clean; \
+#	\
+#	cp -v php.ini-* "$PHP_INI_DIR/"; \
+#	\
+#	runDeps="$( \
+#		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
+#			| tr ',' '\n' \
+#			| sort -u \
+#			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+#	)"; \
+#	apk add --no-cache $runDeps; \
+#	\
+#	apk del --no-network .build-deps; \
+#	\
+#	pecl update-channels; \
+#	rm -rf /tmp/pear ~/.pearrc; \
+#	\
+#	php --version
 
 WORKDIR /var/www/html
 
