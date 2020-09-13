@@ -38,6 +38,8 @@ services:
         volumes: # 将宿主机的文件或目录挂载到容器中
             - ./php/php.ini:/usr/local/etc/php/php.ini # 将配置文件挂到主机
             - ./php/conf.d:/usr/local/etc/php/conf.d # 将配置文件夹挂到主机
+            - ./php/php-fpm.conf:/usr/local/etc/php-fpm.conf # 将配置文件挂到主机
+            - ./php/php-fpm.d:/usr/local/etc/php-fpm.d # 将配置文件夹挂到主机
             - ../wwwroot:/var/www/html # 项目目录映射
         restart: always # 挂断自动重新启动
         privileged: true # 获取特权
@@ -79,7 +81,7 @@ services:
         networks:
             fasti_net:
                 ipv4_address: "192.63.0.41"
-        
+
 networks:
     fasti_net:
         driver: bridge
