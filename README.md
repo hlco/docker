@@ -1,35 +1,24 @@
 ### 工程目录
 ```
 docker
-├── build # 镜像
-│   ├── php72
-│   │   └── Dockerfile
-│   ├── nginx
-│   │   └── Dockerfile
-│   ├── mysql
-│   │   └── Dockerfile
-│   ├── redis
-│   │   └── Dockerfile
-│   └── docker-compose.yml
-├── config # 服务器配置
-│   ├── redis
-│   │   └── redis.conf
-│   ├── mysql
-│   │   ├── conf.d
-│   │   └── my.cnf
-│   ├── nginx
-│   │   ├── conf.d
-│   │   ├── ssl
-│   │   └── nginx.conf
-│   ├── php
-│   │   ├── conf.d
-│   │   └── php72.ini
-├── data # 服务数据
-│   ├── mysql
-│   └── redis
-├── logs # 服务日志
-│   ├── mysql
-│   ├── nginx
-│   └── php
+├── nginx # nginx 服务
+│   ├── conf.d # 服务配置
+│   │   ├── blog.conf 
+│   │   └── default.conf # 默认配置
+│   ├── ssl # 证书
+│   ├── logs # 日志
+│   ├── Dockerfile # docker 文件
+│   └── nginx.conf # 配置
+├── PHP # PHP 服务
+│   ├── conf.d # 服务配置
+│   │   └── mysql.conf
+│   └── php.ini # 配置
+├── redis # redis 服务
+│   ├── data # redis 数据
+│   └── redis.conf # redis 配置
+├── mysql # mysql 服务
+│   ├── data # 数据
+│   ├── logs # 日志
+│   └── my.cnf # 配置
 └── www # 静态资源
 ```
