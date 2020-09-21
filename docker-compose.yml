@@ -3,8 +3,7 @@ version: "2.2"
 services:
 
     nginx: # 服务名称
-#        image: nginx:1.13.9-alpine # 服务使用的镜像
-        build: ./nginx
+        image: nginx:1.13.9-alpine # 服务使用的镜像
         container_name: nginx # 容器名称
         ports: # 服务运行端口
             - "80:80"
@@ -25,8 +24,7 @@ services:
                 ipv4_address: "192.63.0.11"
 
     php:
-#        image: php:7.4-fpm-alpine # 服务使用的镜像
-        build: ./php
+        image: php:7.4-fpm-alpine # 服务使用的镜像
         container_name: php7.4-fpm # 容器名称
         ports: # 服务运行端口
             - "9000:9000"
