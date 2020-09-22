@@ -1,5 +1,5 @@
 # 基础镜像
-FROM alpine:3.5
+FROM alpine:latest
 
 # 作者信息
 MAINTAINER NGINX HL "632968802@qq.com"
